@@ -69,7 +69,7 @@ class model(kp):
         n       = 5
         dims    = [256, 256, 384, 384, 384, 512]
         modules = [2, 2, 2, 2, 2, 4]
-        out_dim = 80
+        out_dim = 20
 
         super(model, self).__init__(
             n, 2, dims, modules, out_dim,
@@ -77,7 +77,8 @@ class model(kp):
             make_br_layer=make_br_layer,
             make_pool_layer=make_pool_layer,
             make_hg_layer=make_hg_layer,
-            kp_layer=residual, cnv_dim=256
+            kp_layer=residual, 
+            cnv_dim=256
         )
 
 loss = AELoss(pull_weight=1e-1, push_weight=1e-1, focal_loss=_neg_loss)

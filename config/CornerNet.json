@@ -21,9 +21,7 @@
 
         "chunk_sizes": [2,3,3],
 
-        "data_dir": "./data",
-
-        "pretrained_model": "./cache/nnet/CornerNet/CornerNet_25000.pkl"
+        "data_dir": "./data"
 
     },
     

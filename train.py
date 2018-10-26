@@ -141,7 +141,7 @@ def train(training_dbs, validation_db, start_iter=0):
             training_loss = nnet.train(**training)
 
             if display and iteration % display == 0:
-                logger.add_scalar("train/loss", training_loss, iteration) ###
+                logger.add_scalars('losses', {'train': training_loss}, iteration) ###
                 print("training loss at iteration {}: {}".format(iteration, training_loss.item()))
             del training_loss
 
@@ -149,8 +149,8 @@ def train(training_dbs, validation_db, start_iter=0):
                 nnet.eval_mode()
                 validation = pinned_validation_queue.get(block=True)
                 validation_loss = nnet.validate(**validation)
-                logger.add_scalar("val/loss", validation_loss, iteration) ###
-                logger.add_scalar("train/lr", learning_rate, iteration) ###
+                logger.add_scalars('losses', {'val': validation_loss}, iteration) ###
+                logger.add_scalar('lr', learning_rate, iteration) ###
                 print("validation loss at iteration {}: {}".format(iteration, validation_loss.item()))
                 nnet.train_mode()
 
@@ -161,7 +161,7 @@ def train(training_dbs, validation_db, start_iter=0):
                 learning_rate /= decay_rate
                 nnet.set_lr(learning_rate)
 
-    
+
 
     # sending signal to kill the thread
     training_pin_semaphore.release()

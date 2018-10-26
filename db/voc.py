@@ -20,7 +20,7 @@ class VOC(DETECTION):
         cache_dir  = system_configs.cache_dir
 
         self._split = split
-        
+
         self._dataset = {
             "trainval": "trainval",
             "test": "test"
@@ -36,14 +36,13 @@ class VOC(DETECTION):
         self._image_file = os.path.join(self._image_dir, "{}")
 
         self._data = "voc"
-        self._mean = np.array([0.40789654, 0.44719302, 0.47026115], dtype=np.float32)
-        self._std  = np.array([0.28863828, 0.27408164, 0.27809835], dtype=np.float32)
-        self._eig_val = np.array([0.2141788, 0.01817699, 0.00341571], dtype=np.float32)
-        self._eig_vec = np.array([
-            [-0.58752847, -0.69563484, 0.41340352],
-            [-0.5832747, 0.00994535, -0.81221408],
-            [-0.56089297, 0.71832671, 0.41158938]
-        ], dtype=np.float32)
+        # Statistics are computed with the VOC images in BGR format 
+        self._mean = np.array([0.3977929, 0.43007544, 0.45161608], dtype=np.float32)
+        self._std  = np.array([0.2397484, 0.23591156, 0.24152339], dtype=np.float32)
+        self._eig_val = np.array([0.17028576, 0.00892282, 0.0032726], dtype=np.float32)
+        self._eig_vec = np.array([[-0.370767, -0.4183294, 0.18946014],
+                                [-0.36702427, 0.06823068, -0.69267446],
+                                [-0.36233178, 0.35972568, 0.51648206]], dtype=np.float32)
 
         self._cat_ids = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
 

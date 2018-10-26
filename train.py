@@ -19,6 +19,8 @@ from nnet.py_factory import NetworkFactory
 from torch.multiprocessing import Process, Queue, Pool
 from db.datasets import datasets
 
+from tensorboardX import SummaryWriter ###
+
 torch.backends.cudnn.enabled   = True
 torch.backends.cudnn.benchmark = True
 
@@ -73,6 +75,8 @@ def train(training_dbs, validation_db, start_iter=0):
     display          = system_configs.display
     decay_rate       = system_configs.decay_rate
     stepsize         = system_configs.stepsize
+
+    logger = SummaryWriter('./logs/')
 
     # getting the size of each database
     training_size   = len(training_dbs[0].db_inds)
@@ -137,6 +141,7 @@ def train(training_dbs, validation_db, start_iter=0):
             training_loss = nnet.train(**training)
 
             if display and iteration % display == 0:
+                logger.add_scalar("train/loss", training_loss, iteration) ###
                 print("training loss at iteration {}: {}".format(iteration, training_loss.item()))
             del training_loss
 
@@ -144,6 +149,8 @@ def train(training_dbs, validation_db, start_iter=0):
                 nnet.eval_mode()
                 validation = pinned_validation_queue.get(block=True)
                 validation_loss = nnet.validate(**validation)
+                logger.add_scalar("val/loss", validation_loss, iteration) ###
+                logger.add_scalar("train/lr", learning_rate, iteration) ###
                 print("validation loss at iteration {}: {}".format(iteration, validation_loss.item()))
                 nnet.train_mode()
 
@@ -153,6 +160,8 @@ def train(training_dbs, validation_db, start_iter=0):
             if iteration % stepsize == 0:
                 learning_rate /= decay_rate
                 nnet.set_lr(learning_rate)
+
+    
 
     # sending signal to kill the thread
     training_pin_semaphore.release()
